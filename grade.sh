@@ -5,7 +5,7 @@ rm -rf grading-area
 
 mkdir grading-area
 
-git clone $1 student-submission
+git clone -q $1 student-submission
 echo 'Finished cloning'
 
 
@@ -43,3 +43,14 @@ if [[ -f grading-area/ListExamples.class ]] && [[ -f grading-area/TestListExampl
 cd grading-area
 java -cp .:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar org.junit.runner.JUnitCore TestListExamples > TestListExampleStdout.txt 2> TestListExampleStderr.txt
 cat TestListExampleStdout.txt
+grep -i "Tests" TestListExampleStdout.txt > TestsLine.txt
+#if [[ TestsLine.txt  == *","* ]]
+#    then
+#        echo "You failed some tests, try again!"
+#	cat TestsLine.txt	
+#	exit
+#    else if [[ TestListExampleStdOut == *"OK"*  ]]
+#    then
+#        echo "Congrats! perfect score 3/3" 
+#    fi
+#fi
