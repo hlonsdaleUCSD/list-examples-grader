@@ -14,3 +14,32 @@ echo 'Finished cloning'
 
 # Then, add here code to compile and run, and do any post-processing of the
 # tests
+
+if [[ -f student-submission/ListExamples.java ]]
+    then
+        echo "ListExamples file found!"
+    else 
+        echo "error: File ListExamples not found!"
+        exit
+    fi
+
+cp student-submission/ListExamples.java grading-area
+cp TestListExamples.java grading-area
+if [[ -f grading-area/ListExamples.java ]] && [[ -f grading-area/TestListExamples.java ]]
+    then
+        echo "Files moved into grading area!"
+    else
+        echo "error moving files into grading area!"
+    fi
+javac -cp $CPATH grading-area/*.java 2> grading-area/javacStderr.txt
+if [[ -f grading-area/ListExamples.class ]] && [[ -f grading-area/TestListExamples.class ]]
+    then
+        echo "Java compilation successful!"
+    else
+        echo "Compile error! Exit code" $?
+        cat grading-area/javacStderr.txt
+        exit
+    fi
+cd grading-area
+java -cp .:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar org.junit.runner.JUnitCore TestListExamples > TestListExampleStdout.txt 2> TestListExampleStderr.txt
+cat TestListExampleStdout.txt
